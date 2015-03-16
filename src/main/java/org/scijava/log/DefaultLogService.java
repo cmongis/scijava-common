@@ -2,7 +2,7 @@
  * #%L
  * SciJava Common shared library for SciJava software.
  * %%
- * Copyright (C) 2009 - 2016 Board of Regents of the University of
+ * Copyright (C) 2009 - 2015 Board of Regents of the University of
  * Wisconsin-Madison, Broad Institute of MIT and Harvard, and Max Planck
  * Institute of Molecular Cell Biology and Genetics.
  * %%
@@ -31,21 +31,37 @@
 
 package org.scijava.log;
 
-import static org.junit.Assert.assertTrue;
-import static org.scijava.log.LogService.WARN;
-
-import org.junit.Test;
+import org.scijava.Priority;
+import org.scijava.plugin.Plugin;
+import org.scijava.service.Service;
 
 /**
- * Tests {@link LogService}.
+ * Implementation of {@link LogService} using the standard error stream.
  * 
  * @author Johannes Schindelin
+ * @author Curtis Rueden
  */
-public class LogServiceTest {
-	@Test
-	public void testDefaultLevel() {
-		final LogService log = new DefaultLogService();
-		int level = log.getLevel();
-		assertTrue("default level (" + level + ") is at least INFO(" + WARN + ")", level >= WARN);
+@Plugin(type = Service.class, priority = Priority.LOW_PRIORITY)
+public class DefaultLogService extends AbstractLogService {
+
+	/**
+	 * Prints a message to stderr.
+	 * 
+	 * @param message the message
+	 */
+	@Override
+	protected void log(final String message) {
+		System.err.println(message);
 	}
+
+	/**
+	 * Prints an exception to stderr.
+	 * 
+	 * @param t the exception
+	 */
+	@Override
+	protected void log(final Throwable t) {
+		t.printStackTrace();
+	}
+
 }
