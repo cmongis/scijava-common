@@ -93,7 +93,7 @@ public class POMTest {
 		assertEquals("pom-scijava", pom.getParentArtifactId());
 		assertNotNull(pom.getParentVersion());
 		assertEquals("org.scijava", pom.getGroupId());
-		assertEquals("scijava-common", pom.getArtifactId());
+		assertEquals("scijava-minimal", pom.getArtifactId());
 		assertNotNull(pom.getVersion());
 		assertEquals("Travis CI", pom.getCIManagementSystem());
 		final String ciManagementURL = pom.getCIManagementURL();
@@ -109,17 +109,17 @@ public class POMTest {
 		assertTrue(pom.getProjectDescription().startsWith(
 			"SciJava Common is a shared library for SciJava software."));
 		assertEquals("2009", pom.getProjectInceptionYear());
-		assertEquals("SciJava Common", pom.getProjectName());
-		assertEquals("https://github.com/scijava/scijava-common", //
+		assertEquals("SciJava Minimal", pom.getProjectName());
+		assertEquals("https://github.com/cmongis/scijava-minimal", //
 			pom.getProjectURL());
 		final String scmConnection = pom.getSCMConnection();
-		assertEquals("scm:git:git://github.com/scijava/scijava-common",
+		assertEquals("scm:git:git://github.com/cmongis/scijava-minimal",
 			scmConnection);
 		final String scmDeveloperConnection = pom.getSCMDeveloperConnection();
-		assertEquals("scm:git:git@github.com:scijava/scijava-common",
+		assertEquals("scm:git:git@github.com:cmongis/scijava-minimal",
 			scmDeveloperConnection);
 		assertNotNull(pom.getSCMTag()); // won't be HEAD for release tags
-		assertEquals("https://github.com/scijava/scijava-common", pom.getSCMURL());
+		assertEquals("https://github.com/cmongis/scijava-minimal", pom.getSCMURL());
 	}
 
 	@Test
@@ -128,7 +128,7 @@ public class POMTest {
 	{
 		final POM pom = new POM(new File("pom.xml"));
 		assertEquals("repo", pom.cdata("//project/licenses/license/distribution"));
-		assertEquals("https://github.com/scijava/scijava-common", //
+		assertEquals("https://github.com/cmongis/scijava-minimal", //
 			pom.cdata("//project/url"));
 	}
 

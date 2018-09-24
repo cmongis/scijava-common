@@ -9,12 +9,12 @@
 		<relativePath />
 	</parent>
 
-	<artifactId>scijava-minimum</artifactId>
+	<artifactId>scijava-minimal</artifactId>
 	<version>2.75.1-SNAPSHOT</version>
 
-	<name>SciJava Minimum</name>
+	<name>SciJava Minimal</name>
 	<description>SciJava Common is a shared library for SciJava software. It provides a plugin framework, with an extensible mechanism for service discovery, backed by its own annotation processor, so that plugins can be loaded dynamically. It is used by downstream projects in the SciJava ecosystem, such as ImageJ and SCIFIO.</description>
-	<url>https://github.com/scijava/scijava-common</url>
+	<url>https://github.com/cmongis/scijava-minimal</url>
 	<inceptionYear>2009</inceptionYear>
 	<organization>
 		<name>SciJava</name>
@@ -139,10 +139,10 @@
 	</mailingLists>
 
 	<scm>
-		<connection>scm:git:git://github.com/scijava/scijava-common</connection>
-		<developerConnection>scm:git:git@github.com:scijava/scijava-common</developerConnection>
+		<connection>scm:git:git://github.com/cmongis/scijava-minimal</connection>
+		<developerConnection>scm:git:git@github.com:cmongis/scijava-minimal</developerConnection>
 		<tag>HEAD</tag>
-		<url>https://github.com/scijava/scijava-common</url>
+		<url>https://github.com/cmongis/scijava-minimal</url>
 	</scm>
 	<issueManagement>
 		<system>GitHub Issues</system>
