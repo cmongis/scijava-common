@@ -527,6 +527,7 @@ public class Context implements Disposable {
                 f.setAccessible(true);
                 
                 T t = type.newInstance();
+                inject(t);
                 ClassUtils.setValue(f, o,t);
             } catch (InstantiationException ex) {
                 Logger.getLogger(Context.class.getName()).log(Level.SEVERE, null, ex);
