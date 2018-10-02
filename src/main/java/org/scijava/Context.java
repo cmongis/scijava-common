@@ -36,15 +36,19 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.scijava.event.ContextDisposingEvent;
 import org.scijava.event.EventHandler;
 import org.scijava.event.EventService;
 import org.scijava.log.LogService;
+import org.scijava.plugin.Bean;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.PluginIndex;
 import org.scijava.service.Service;
@@ -389,6 +393,18 @@ public class Context implements Disposable {
 		// NB: Subscribe to all events handled by this object.
 		// This greatly simplifies event handling.
 		subscribeToEvents(o);
+                
+                final Query beanQuery = new Query();
+                query.put(Bean.class, Field.class);
+                ClassUtils.cacheAnnotatedObjects(o.getClass(), beanQuery);
+                
+                List<Field> beanFields = new ArrayList<>();
+                ClassUtils.getAnnotatedFields(o.getClass(), Bean.class, beanFields);
+                
+                for(final Field f : beanFields){
+                    injectBean(f, f.getDeclaringClass(), o);
+                }
+                
 	}
 
 	/**
@@ -505,6 +521,25 @@ public class Context implements Disposable {
 			handleSafely(t);
 		}
 	}
+        
+        private <T> void injectBean(final Field f, Class<T> type, final Object o) {
+            try {
+                f.setAccessible(true);
+                
+                T t = type.newInstance();
+                ClassUtils.setValue(f, o,t);
+            } catch (InstantiationException ex) {
+                Logger.getLogger(Context.class.getName()).log(Level.SEVERE, null, ex);
+              throw new IllegalStateException("Could not instanciate a bean of type : " + //
+						f.getDeclaringClass().getName() + "#" + f.getName());
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(Context.class.getName()).log(Level.SEVERE, null, ex);
+                throw new IllegalStateException("Could not access the bean of type : " + //
+						f.getDeclaringClass().getName() + "#" + f.getName());
+            }
+            
+            
+        }
 
 	private void subscribeToEvents(final Object o) {
 		try {
