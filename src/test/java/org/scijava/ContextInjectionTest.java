@@ -40,10 +40,12 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.junit.After;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 import org.scijava.event.EventHandler;
 import org.scijava.event.EventService;
 import org.scijava.event.SciJavaEvent;
+import org.scijava.plugin.Bean;
 import org.scijava.plugin.Parameter;
 import org.scijava.service.AbstractService;
 import org.scijava.service.Service;
@@ -205,6 +207,17 @@ public class ContextInjectionTest {
 		eventService.publish(new SciJavaEvent() {/**/});
 		assertTrue(hasEvents.eventReceived);
 	}
+        
+        @Test
+        public void textBeanInjection()  {
+            context = new Context();
+            
+            final HasBean hasBean = new HasBean();
+            context.inject(hasBean);
+            
+            assertNotNull(hasBean.hasContext);
+            
+        }
 
 	/**
 	 * Tests that event subscription works properly for objects which do not
@@ -331,5 +344,25 @@ public class ContextInjectionTest {
 		}
 
 	}
+        
+        
+        /**
+         * An object that has... Beans :-D
+         */
+        public static class HasBean {
+            @Bean
+            public HasContext hasContext;
+        }
+        
+        
+        /**
+         * Object with a context to be injected
+         */
+        public static class HasContext {
+            @Parameter
+            public Context context;
+        }
+        
+        
 
 }

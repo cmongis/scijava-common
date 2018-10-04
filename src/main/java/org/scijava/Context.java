@@ -402,7 +402,7 @@ public class Context implements Disposable {
                 ClassUtils.getAnnotatedFields(o.getClass(), Bean.class, beanFields);
                 
                 for(final Field f : beanFields){
-                    injectBean(f, f.getDeclaringClass(), o);
+                    injectBean(f, f.getType(), o);
                 }
                 
 	}
