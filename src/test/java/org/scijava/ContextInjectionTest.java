@@ -47,6 +47,7 @@ import org.scijava.event.EventService;
 import org.scijava.event.SciJavaEvent;
 import org.scijava.plugin.Bean;
 import org.scijava.plugin.Parameter;
+import org.scijava.plugin.PostInject;
 import org.scijava.service.AbstractService;
 import org.scijava.service.Service;
 
@@ -208,8 +209,12 @@ public class ContextInjectionTest {
 		assertTrue(hasEvents.eventReceived);
 	}
         
+        /**
+         * Test that attribute presenting the {@link Bean} interface are 
+         * instantiated.
+         */
         @Test
-        public void textBeanInjection()  {
+        public void testBeanInjection()  {
             context = new Context();
             
             final HasBean hasBean = new HasBean();
@@ -218,6 +223,20 @@ public class ContextInjectionTest {
             assertNotNull(hasBean.hasContext);
             
         }
+        
+        @Test
+        public void testPostInject() {
+            
+            context = new Context();
+            
+            final HasPostInject hasPostInject = new HasPostInject();
+            
+            context.inject(hasPostInject);
+            
+            assertEquals("The counter was incremetated via the the @PostInject method",1,hasPostInject.count);
+
+        }
+        
 
 	/**
 	 * Tests that event subscription works properly for objects which do not
@@ -361,6 +380,17 @@ public class ContextInjectionTest {
         public static class HasContext {
             @Parameter
             public Context context;
+        }
+        
+        public static class HasPostInject {
+            public int count = 0;
+            
+            
+            @PostInject
+            public void init() {
+                count++;
+            }
+            
         }
         
         
