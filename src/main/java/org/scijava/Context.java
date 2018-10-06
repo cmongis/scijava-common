@@ -33,6 +33,7 @@
 package org.scijava;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -51,6 +52,7 @@ import org.scijava.log.LogService;
 import org.scijava.plugin.Bean;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.PluginIndex;
+import org.scijava.plugin.PostInject;
 import org.scijava.service.Service;
 import org.scijava.service.ServiceHelper;
 import org.scijava.service.ServiceIndex;
@@ -393,7 +395,7 @@ public class Context implements Disposable {
 		// NB: Subscribe to all events handled by this object.
 		// This greatly simplifies event handling.
 		subscribeToEvents(o);
-                
+                        
                 final Query beanQuery = new Query();
                 query.put(Bean.class, Field.class);
                 ClassUtils.cacheAnnotatedObjects(o.getClass(), beanQuery);
@@ -405,6 +407,18 @@ public class Context implements Disposable {
                     injectBean(f, f.getType(), o);
                 }
                 
+                List<Method> annotatedMethods = ClassUtils.getAnnotatedMethods(o.getClass(),PostInject.class);
+                for(final Method m : annotatedMethods) {
+                    try {
+                        m.invoke(o);
+                    } catch (IllegalAccessException ex) {
+                        Logger.getLogger(Context.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IllegalArgumentException ex) {
+                        Logger.getLogger(Context.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (InvocationTargetException ex) {
+                        Logger.getLogger(Context.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
 	}
 
 	/**
